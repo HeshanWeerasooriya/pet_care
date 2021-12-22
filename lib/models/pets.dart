@@ -1,31 +1,29 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'vaccination.dart';
 
 class Pet {
-  // 1
   String name;
   String? notes;
   String type;
-  // 2
+
   List<Vaccination> vaccinations;
-  // 3
+
   String? referenceId;
-  // 4
+
   Pet(this.name,
       {this.notes,
       required this.type,
       this.referenceId,
       required this.vaccinations});
-  // 5
+
   factory Pet.fromSnapshot(DocumentSnapshot snapshot) {
     final newPet = Pet.fromJson(snapshot.data() as Map<String, dynamic>);
     newPet.referenceId = snapshot.reference.id;
     return newPet;
   }
-  // 6
+
   factory Pet.fromJson(Map<String, dynamic> json) => _petFromJson(json);
-  // 7
+
   Map<String, dynamic> toJson() => _petToJson(this);
 
   @override
@@ -58,7 +56,8 @@ Map<String, dynamic> _petToJson(Pet instance) => <String, dynamic>{
       'type': instance.type,
       'vaccinations': _vaccinationList(instance.vaccinations),
     };
-// 4
+
+//Convert a list of vaccinations into a list of mapped values.
 List<Map<String, dynamic>>? _vaccinationList(List<Vaccination>? vaccinations) {
   if (vaccinations == null) {
     return null;
