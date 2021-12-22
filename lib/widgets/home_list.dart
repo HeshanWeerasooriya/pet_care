@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
+import '../models/pets.dart';
+import '../repository/data_repository.dart';
 import 'add_pet_dialog.dart';
+import 'pet_card.dart';
 
 class HomeList extends StatefulWidget {
   const HomeList({Key? key}) : super(key: key);
@@ -9,7 +12,7 @@ class HomeList extends StatefulWidget {
 }
 
 class _HomeListState extends State<HomeList> {
-  // TODO Add Data Repository
+  final DataRepository repository = DataRepository();
   final boldStyle =
       const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold);
 
@@ -23,10 +26,13 @@ class _HomeListState extends State<HomeList> {
       appBar: AppBar(
         title: const Text('Pets'),
       ),
-      // TODO Add StreamBuilder
-      body: const Center(
-        child: Text('Body'),
-      ),
+      body: StreamBuilder<QuerySnapshot>(
+          stream: repository.getStream(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) return LinearProgressIndicator();
+
+            return _buildList(context, snapshot.data?.docs ?? []);
+          }),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _addPet();
@@ -46,5 +52,16 @@ class _HomeListState extends State<HomeList> {
     );
   }
 
-  // TODO Add _buildList
+  Widget _buildList(BuildContext context, List<DocumentSnapshot>? snapshot) {
+    return ListView(
+      padding: const EdgeInsets.only(top: 20.0),
+      children: snapshot!.map((data) => _buildListItem(context, data)).toList(),
+    );
+  }
+
+  Widget _buildListItem(BuildContext context, DocumentSnapshot snapshot) {
+    final pet = Pet.fromSnapshot(snapshot);
+
+    return PetCard(pet: pet, boldStyle: boldStyle);
+  }
 }
