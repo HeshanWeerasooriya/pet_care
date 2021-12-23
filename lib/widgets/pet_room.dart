@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pet_care/widgets/pet_details.dart';
 
 import '../models/pets.dart';
 
@@ -18,8 +19,7 @@ class PetRoom extends StatelessWidget {
                 Navigator.pop(context);
               }),
         ),
-        // TODO Add pet detail
-        body: const Text('Pet Details Comes Here'),
+        body: PetDetail(pet: pet),
       ),
     );
   }
