@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/pets.dart';
 import '../utils/pets_icons.dart';
+import 'pet_room.dart';
 
 class PetCard extends StatelessWidget {
   final Pet pet;
@@ -31,8 +32,12 @@ class PetCard extends StatelessWidget {
           _getPetIcon(pet.type)
         ],
       ),
-      // TODO Add pet room navigation
-      onTap: () {},
+      onTap: () => Navigator.push<Widget>(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PetRoom(pet: pet),
+        ),
+      ),
       splashColor: splashColor[pet.type],
     ));
   }
